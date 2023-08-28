@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "1092047194894",
+    "project_id": "antidhrishti",
+    "storage_bucket": "antidhrishti.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1092047194894:android:1f45d6335798e0e96de55f",
+        "android_client_info": {
+          "package_name": "com.lucario.antidhrishti"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1092047194894-ho0g1junte93en7fp9lhso6hgmflt1c0.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBSqd1TsMLqrRilOaR9C3RoJVrOeZYBUjM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1092047194894-ho0g1junte93en7fp9lhso6hgmflt1c0.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
