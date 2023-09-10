@@ -151,6 +151,7 @@ public class LoginActivity extends AppCompatActivity {
                 sharedPreferences.edit().putBoolean("isLoggedIn", true).apply();
                 Intent intent = new Intent(LoginActivity.this, FaceEnroll.class);
                 startActivity(intent);
+                finish();
             } else {
                 showErrorDialog();
             }
