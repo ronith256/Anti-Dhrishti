@@ -40,6 +40,10 @@ public class ClassViewAdapter extends RecyclerView.Adapter<ClassViewAdapter.Clas
     public void onBindViewHolder(@NonNull ClassesViewHolder holder, int position) {
         ClassDataModel classDataModel = data.get(position);
         holder.className.setText(classDataModel.getClassName());
+        if(classDataModel.isAttended()){
+            holder.classStatusImage.setImageResource(R.drawable.baseline_check_24);
+        }
+        else {
         holder.classCard.setOnClickListener(e->{
             if(classDataModel.canAttend() && !classDataModel.isAttended()){
                 SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
@@ -49,6 +53,12 @@ public class ClassViewAdapter extends RecyclerView.Adapter<ClassViewAdapter.Clas
                 }
             }
         });
+        }
+    }
+
+    public void updateDataset(ArrayList<ClassDataModel> data){
+        this.data = data;
+        notifyDataSetChanged();
     }
 
     @Override

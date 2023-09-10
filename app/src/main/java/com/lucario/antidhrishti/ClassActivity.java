@@ -43,7 +43,7 @@ public class ClassActivity extends AppCompatActivity implements ClassViewAdapter
     private ArrayList<ClassDataModel> data;
 
     private String class_name, time;
-    private String BaseURL = "https://5a22-152-58-213-31.ngrok-free.app";
+    private String BaseURL = "https://antidhrishti.lucario.site";
     private boolean attended = false;
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -56,18 +56,15 @@ public class ClassActivity extends AppCompatActivity implements ClassViewAdapter
         new Thread(() -> {
             data = getClassDataFromServer(secret, batch_ID);
 
-            runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
+            runOnUiThread(() -> {
 
-                    // Assuming you are using some Custom Adapter which takes 'data' as parameter
-                    ClassViewAdapter adapter = new ClassViewAdapter(data, ClassActivity.this);
-                    recyclerView.setAdapter(adapter);
-                    recyclerView.setLayoutManager(new LinearLayoutManager(ClassActivity.this));
+                // Assuming you are using some Custom Adapter which takes 'data' as parameter
+                adapter = new ClassViewAdapter(data, ClassActivity.this);
+                recyclerView.setAdapter(adapter);
+                recyclerView.setLayoutManager(new LinearLayoutManager(ClassActivity.this));
 
-                    // To notify the adapter about data change
-                    adapter.notifyDataSetChanged();
-                }
+                // To notify the adapter about data change
+                adapter.notifyDataSetChanged();
             });
         }).start();
 
@@ -92,7 +89,7 @@ public class ClassActivity extends AppCompatActivity implements ClassViewAdapter
     private String getStudentID(){
         SharedPreferences sharedPreferences = getSharedPreferences("cred", MODE_PRIVATE);
         String id = sharedPreferences.getString("student-id", null);
-//        System.out.println(id);
+        System.out.println(id);
         try{
             id = id.substring(id.length()-3);
 //            System.out.println(id);
@@ -115,7 +112,7 @@ public class ClassActivity extends AppCompatActivity implements ClassViewAdapter
                 .build();
 
         // Assuming server URL as "your_server_url"
-        Request request = new Request.Builder().url(BaseURL+"/mark_attendance.php").post(formBody).build();
+        Request request = new Request.Builder().url(BaseURL+"/mark_attendance").post(formBody).build();
 
         try {
             Response response = client.newCall(request).execute();
@@ -128,6 +125,8 @@ public class ClassActivity extends AppCompatActivity implements ClassViewAdapter
                 JSONObject jsonObject = new JSONObject(responseBody);
                 if(jsonObject.getBoolean("success")){
                     runOnUiThread(()->Toast.makeText(this, "Attendance marked successfully", Toast.LENGTH_SHORT).show());
+                    data = getClassDataFromServer(secret, batch_ID);
+                    runOnUiThread(()->adapter.updateDataset(data));
                     attended = true;
                 } else {
                     runOnUiThread(()->Toast.makeText(this, "Attendance marking failed", Toast.LENGTH_SHORT).show());
@@ -145,10 +144,10 @@ public class ClassActivity extends AppCompatActivity implements ClassViewAdapter
         FormBody formBody = new FormBody.Builder()
                 .add("secret-key", secretKey)
                 .add("batch-id", batchId)
+                .add("student-id", getStudentID())
                 .build();
 
-        // Assuming server URL as "your_server_url"
-        Request request = new Request.Builder().url(BaseURL+"/getclass.php").post(formBody).build();
+        Request request = new Request.Builder().url(BaseURL+"/get_class").post(formBody).build();
 
         try {
             Response response = client.newCall(request).execute();
@@ -171,8 +170,8 @@ public class ClassActivity extends AppCompatActivity implements ClassViewAdapter
                     SimpleDateFormat dateTimeFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
                     Date startTime = dateTimeFormat.parse(classDataObject.getString("start_time"));
                     Date endTime = dateTimeFormat.parse(classDataObject.getString("end_time"));
-//                    boolean isAttended = (classDataObject.getInt("attended") == 1);
-                    boolean isAttended = false;
+                    boolean isAttended = (classDataObject.getInt("attended") == 1);
+//                    boolean isAttended = false;
                     int timeCredits = classDataObject.getInt("time_credits");
                     boolean canAttend = (classDataObject.getInt("can_attend") == 1);
 

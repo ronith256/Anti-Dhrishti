@@ -1,8 +1,10 @@
 package com.lucario.antidhrishti;
 
+import android.Manifest;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.text.Editable;
@@ -14,6 +16,7 @@ import android.widget.Toast;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -30,16 +33,16 @@ import okhttp3.Response;
 
 public class LoginActivity extends AppCompatActivity {
     private EditText username, password;
+    private static final int REQUEST_CAMERA_PERMISSION = 100;
     private Button loginButton;
     private boolean buttonState;
 
-    private String baseURL = "https://5a22-152-58-213-31.ngrok-free.app";
+    private String baseURL = "https://antidhrishti.lucario.site";
     private SharedPreferences sharedPreferences;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         sharedPreferences = getSharedPreferences("cred", MODE_PRIVATE);
         if(isLoggedIn()){
             if(sharedPreferences.getBoolean("face-enrolled", false)){
@@ -51,6 +54,9 @@ public class LoginActivity extends AppCompatActivity {
                 startActivity(intent);
                 finish();
             }
+        }
+        if (ActivityCompat.checkSelfPermission(this, android.Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
+            requestPermissions(new String[] {Manifest.permission.CAMERA}, REQUEST_CAMERA_PERMISSION);
         }
 
         setContentView(R.layout.activity_login);
@@ -159,7 +165,7 @@ public class LoginActivity extends AppCompatActivity {
                     .build();
 
             Request request = new Request.Builder()
-                    .url(baseURL + "/login.php")
+                    .url(baseURL + "/login")
                     .post(formBody)
                     .addHeader("Accept", "application/json")
                     .build();

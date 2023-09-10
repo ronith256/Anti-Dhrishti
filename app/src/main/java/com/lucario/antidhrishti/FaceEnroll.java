@@ -51,6 +51,9 @@ import java.util.List;
 import java.util.concurrent.Executor;
 import java.util.concurrent.atomic.AtomicBoolean;
 
+import okhttp3.FormBody;
+import okhttp3.OkHttpClient;
+
 public class FaceEnroll extends AppCompatActivity {
 
     private static final int TF_OD_API_INPUT_SIZE = 112;
@@ -122,6 +125,7 @@ public class FaceEnroll extends AppCompatActivity {
                 }
             }
         });
+
         faceFileName = getIntent().getStringExtra("faceFileName");
         try{
             detector =
@@ -276,7 +280,6 @@ public class FaceEnroll extends AppCompatActivity {
         } catch (IOException e) {
             e.printStackTrace();
         }
-
 //        try {
 //            File file = new File(getExternalFilesDir(Environment.DIRECTORY_DOCUMENTS), faceFileName);
 //            FileOutputStream fos = new FileOutputStream(file);
@@ -288,8 +291,6 @@ public class FaceEnroll extends AppCompatActivity {
 //        } catch (IOException e) {
 //            e.printStackTrace();
 //        }
-
-
     }
 
 
@@ -348,6 +349,10 @@ public class FaceEnroll extends AppCompatActivity {
         return null;
     }
 
+    private void uploadFaceInfo(){
+        OkHttpClient client = new OkHttpClient();
+    }
+
     private void startPreview() {
         if (mCameraDevice == null || !mSurfaceView.getHolder().getSurface().isValid()) {
             return;
@@ -385,9 +390,5 @@ public class FaceEnroll extends AppCompatActivity {
         public NoImageException() {
             super("Could not capture image");
         }
-    }
-
-    private enum DetectorMode {
-        TF_OD_API;
     }
 }
